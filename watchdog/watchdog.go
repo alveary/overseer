@@ -29,6 +29,7 @@ func Watch(service *registry.Service) {
 					return
 				}
 				if resp.StatusCode > 299 {
+					fmt.Println(fmt.Sprintf("Watchdog Lookup: (%s) Status: %s", service.Alive, resp.StatusCode))
 					errorchan <- fmt.Errorf("Request Error: %s", resp)
 					return
 				}
