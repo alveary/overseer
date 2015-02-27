@@ -31,7 +31,10 @@ func AppEngine() *martini.ClassicMartini {
 	})
 
 	m.Get("/service/:name", func(params martini.Params, r render.Render) {
-		r.JSON(200, servicereg.Services[params["name"]])
+		resp := map[string]interface{}{
+			"root": servicereg.Services[params["name"]],
+		}
+		r.JSON(200, resp)
 	})
 
 	return m
