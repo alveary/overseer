@@ -1,4 +1,4 @@
-package main
+package overseer
 
 import (
 	"flag"
@@ -10,6 +10,7 @@ import (
 // AppEngine for web engine setup
 func AppEngine() *martini.ClassicMartini {
 	m := martini.Classic()
+	registry := Registry{}
 	return m
 }
 
