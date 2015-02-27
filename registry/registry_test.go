@@ -14,13 +14,13 @@ type RegistryTestSuite struct {
 // func (suite *RegistryTestSuite) SetupTest() {
 // }
 func (suite *RegistryTestSuite) TestServiceRegistration() {
-	registry := Registry{make(map[string][]Service)}
-	newService := Service{Name: "fubar", URL: "test"}
-	assert.Equal(suite.T(), len(registry.Services["fubar"]), 0, "A new registry should be empty")
+	registry := Registry{make(map[string]interface{})}
+	newService := Service{"service-name", "root-url", "alive-url", 0}
+	assert.Equal(suite.T(), registry.Services["service-name"], nil, "A new registry should be empty")
 
 	registry.Register(newService)
 
-	assert.Equal(suite.T(), len(registry.Services["fubar"]), 1, "The new service should be registered")
+	assert.Equal(suite.T(), registry.Services["service-name"], newService, "The new service should be registered")
 }
 
 // In order for 'go test' to run this suite, we need to create

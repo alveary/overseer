@@ -2,7 +2,7 @@ package registry
 
 // Registry of microservices
 type Registry struct {
-	Services map[string]Service
+	Services map[string]interface{}
 }
 
 // Register registrates a new service for a service name
