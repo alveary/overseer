@@ -5,9 +5,9 @@ type Service struct {
 	Name  string `json:"name"`
 	Root  string `json:"root"`
 	Alive string `json:"alive"`
-	fails int
+	Fails int    `json:"fails"`
 }
 
 func (service *Service) AddFailure() {
-	service.fails = service.fails + 1
+	service.Fails = service.Fails + 1
 }
