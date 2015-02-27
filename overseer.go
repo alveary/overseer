@@ -10,7 +10,6 @@ import (
 // AppEngine for web engine setup
 func AppEngine() *martini.ClassicMartini {
 	m := martini.Classic()
-
 	return m
 }
 
