@@ -44,7 +44,7 @@ func requestServiceAnnouncement(overseerRoot string, service []byte) {
 				case <-time.After(time.Second * 3):
 				}
 
-				time.Sleep(1 * time.Minute) // update registration once a minute
+				time.Sleep(10 * time.Minute) // update registration once a minute
 			}() // end wait and handle routine (chans are cleaned here)
 
 		} // end for loop
