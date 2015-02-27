@@ -23,7 +23,7 @@ func Watch(service *registry.Service) {
 			}()
 
 			go func() {
-				resp, err := http.Get(service.Alive)
+				resp, err := http.Head(service.Alive)
 				if err != nil {
 					errorchan <- err
 					return
