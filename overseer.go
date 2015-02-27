@@ -10,6 +10,7 @@ import (
 	"github.com/alveary/overseer/watchdog"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
+	"github.com/martini-contrib/render"
 )
 
 // ServiceRegistry provides access to the dummy Registry
@@ -27,6 +28,10 @@ func AppEngine() *martini.ClassicMartini {
 		fmt.Println(errors)
 		servicereg.Register(service)
 		watchdog.Watch(&service)
+	})
+
+	m.Get("/service/:name", func(params martini.Params, r render.Render) {
+		r.JSON(200, servicereg.Services[params["name"]])
 	})
 
 	return m
