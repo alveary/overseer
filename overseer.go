@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/alveary/overseer/registry"
+	"github.com/alveary/overseer/watchdog"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
 )
@@ -21,9 +22,11 @@ func ServiceRegistry() registry.Registry {
 func AppEngine() *martini.ClassicMartini {
 	m := martini.Classic()
 	servicereg := ServiceRegistry()
-	m.Get("/", binding.Form(registry.Service{}), func(errors binding.Errors, service registry.Service, resp http.ResponseWriter) {
+
+	m.Post("/", binding.Json(registry.Service{}), func(errors binding.Errors, service registry.Service, resp http.ResponseWriter) {
 		fmt.Println(errors)
 		servicereg.Register(service)
+		watchdog.Watch(&service)
 	})
 
 	return m
