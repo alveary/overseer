@@ -3,8 +3,8 @@ package registry
 // Service ...
 type Service struct {
 	Name  string `json:"name"`
-	Root  string `json:"url"`
-	Alive string `json:"url"`
+	Root  string `json:"root"`
+	Alive string `json:"alive"`
 	fails int
 }
 
