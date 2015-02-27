@@ -22,6 +22,8 @@ func ServiceRegistry() registry.Registry {
 // AppEngine for web engine setup
 func AppEngine() *martini.ClassicMartini {
 	m := martini.Classic()
+	m.Use(render.Renderer())
+
 	servicereg := ServiceRegistry()
 
 	m.Post("/", binding.Json(registry.Service{}), func(errors binding.Errors, service registry.Service, resp http.ResponseWriter) {
@@ -30,11 +32,9 @@ func AppEngine() *martini.ClassicMartini {
 		watchdog.Watch(&service)
 	})
 
-	m.Get("/service/:name", func(params martini.Params, r render.Render) {
-		resp := map[string]interface{}{
-			"root": servicereg.Services[params["name"]],
-		}
-		r.JSON(200, resp)
+	m.Get("/service/:name", func(r render.Render, params martini.Params) {
+		r.JSON(200, servicereg.Services[params["name"]])
+
 	})
 
 	return m
