@@ -1,4 +1,4 @@
-# [Overseer](https://overseer.herokuapp.com/)
+# [Overseer](https://alveary-overseer.herokuapp.com/)
 
 ![Travis-CI](https://travis-ci.org/alveary/overseer.svg) by [Travis-CI](https://travis-ci.org/alveary/overseer)
 
