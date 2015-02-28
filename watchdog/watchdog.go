@@ -49,7 +49,7 @@ func Watch(service *registry.Service) {
 				fmt.Printf("Service \"%s\" is not responding in time, increasing fail count to %d\n", service.Name, service.Fails)
 			}
 
-			time.Sleep(3 * time.Second)
+			time.Sleep(30 * time.Second)
 		}
 
 	}()
