@@ -26,7 +26,7 @@ func AppEngine() *martini.ClassicMartini {
 
 	m.Post("/", binding.Json(registry.Service{}), func(errors binding.Errors, service registry.Service, resp http.ResponseWriter, log *log.Logger) {
 		log.Printf("registering new Service: %s", service.Name)
-		servicereg.Register(service)
+		servicereg.Register(&service)
 		watchdog.Watch(&service)
 	})
 

@@ -18,7 +18,7 @@ func (suite *RegistryTestSuite) TestServiceRegistration() {
 	newService := Service{"service-name", "root-url", "alive-url", 0}
 	assert.Equal(suite.T(), registry.Services["service-name"], nil, "A new registry should be empty")
 
-	registry.Register(newService)
+	registry.Register(&newService)
 
 	assert.Equal(suite.T(), registry.Services["service-name"], newService, "The new service should be registered")
 }
