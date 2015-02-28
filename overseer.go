@@ -1,10 +1,8 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/alveary/overseer/registry"
 	"github.com/alveary/overseer/watchdog"
@@ -41,10 +39,6 @@ func AppEngine() *martini.ClassicMartini {
 }
 
 func main() {
-	var port int
-	flag.IntVar(&port, "p", 8999, "the port number")
-	flag.Parse()
-
 	m := AppEngine()
-	m.RunOnAddr(":" + strconv.Itoa(port))
+	m.Run()
 }

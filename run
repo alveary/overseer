@@ -1,3 +1,4 @@
 #!/bin/sh
 
+export PORT="8999"
 reflex -r '.*\.go' -s -- sh -c 'godep go build ; codesign -s go-self-signed -f ./overseer ; ./overseer'
