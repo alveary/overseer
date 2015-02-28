@@ -1,1 +1,1 @@
-web: overseer -p=$PORT
+web: overseer
