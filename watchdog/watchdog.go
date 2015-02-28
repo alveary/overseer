@@ -14,14 +14,14 @@ func Watch(service *registry.Service) {
 	go func() {
 		available := true
 
-		for available {
+		checkchan := make(chan bool)
+		errorchan := make(chan error)
+		defer func() {
+			close(checkchan)
+			close(errorchan)
+		}()
 
-			checkchan := make(chan bool)
-			errorchan := make(chan error)
-			defer func() {
-				close(checkchan)
-				close(errorchan)
-			}()
+		for available {
 
 			go func() {
 				resp, err := http.Head(service.Alive)

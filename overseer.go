@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/alveary/overseer/registry"
@@ -24,8 +24,8 @@ func AppEngine() *martini.ClassicMartini {
 
 	servicereg := ServiceRegistry()
 
-	m.Post("/", binding.Json(registry.Service{}), func(errors binding.Errors, service registry.Service, resp http.ResponseWriter) {
-		fmt.Println(errors)
+	m.Post("/", binding.Json(registry.Service{}), func(errors binding.Errors, service registry.Service, resp http.ResponseWriter, log *log.Logger) {
+		log.Printf("registering new Service: %s", service.Name)
 		servicereg.Register(service)
 		watchdog.Watch(&service)
 	})
