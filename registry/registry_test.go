@@ -20,7 +20,7 @@ func (suite *RegistryTestSuite) TestServiceRegistration() {
 
 	registry.Register(&newService)
 
-	assert.Equal(suite.T(), registry.Services["service-name"], newService, "The new service should be registered")
+	assert.Equal(suite.T(), registry.Services["service-name"], &newService, "The new service should be registered")
 }
 
 // In order for 'go test' to run this suite, we need to create
