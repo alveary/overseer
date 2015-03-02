@@ -30,12 +30,12 @@ func AppEngine() *martini.ClassicMartini {
 		watchdog.Watch(&service)
 	})
 
-	m.Get("/services", func(r render.Render) {
+	m.Get("/", func(r render.Render) {
 		r.JSON(200, servicereg.Services)
 
 	})
 
-	m.Get("/services/:name", func(r render.Render, params martini.Params) {
+	m.Get("/:name", func(r render.Render, params martini.Params) {
 		r.JSON(200, servicereg.Services[params["name"]])
 
 	})
