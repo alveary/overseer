@@ -1,4 +1,4 @@
-package registry
+package service
 
 // Service ...
 type Service struct {

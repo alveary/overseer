@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/alveary/overseer/registry"
+	"github.com/alveary/overseer/service"
 )
 
 // Watch ...
-func Watch(service *registry.Service) {
+func Watch(service *service.Service) {
 
 	go func() {
 		available := true
