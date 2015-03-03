@@ -3,6 +3,7 @@ package registry
 import (
 	"testing"
 
+	"github.com/alveary/overseer/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -15,7 +16,7 @@ type RegistryTestSuite struct {
 // }
 func (suite *RegistryTestSuite) TestServiceRegistration() {
 	registry := Registry{make(map[string]interface{})}
-	newService := Service{"service-name", "root-url", "alive-url", 0}
+	newService := service.Service{"service-name", "root-url", "alive-url", 0}
 	assert.Equal(suite.T(), registry.Services["service-name"], nil, "A new registry should be empty")
 
 	registry.Register(&newService)
