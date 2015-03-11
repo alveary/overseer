@@ -8,14 +8,14 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type RegistryTestSuite struct {
+type TestSuite struct {
 	suite.Suite
 }
 
-// func (suite *RegistryTestSuite) SetupTest() {
+// func (suite *TestSuite) SetupTest() {
 // }
 
-func (suite *RegistryTestSuite) TestServiceRegistration() {
+func (suite *TestSuite) TestServiceRegistration() {
 	registry := Registry{make(map[string]interface{})}
 	newService := service.Service{"service-name", "root-url", "alive-url", 0}
 	assert.Equal(suite.T(), registry.Services["service-name"], nil, "A new registry should be empty")
@@ -27,6 +27,6 @@ func (suite *RegistryTestSuite) TestServiceRegistration() {
 
 // In order for 'go test' to run this suite, we need to create
 // a normal test function and pass our suite to suite.Run
-func TestRegistrymTestSuite(t *testing.T) {
-	suite.Run(t, new(RegistryTestSuite))
+func TestmTestSuite(t *testing.T) {
+	suite.Run(t, new(TestSuite))
 }
