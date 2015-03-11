@@ -8,18 +8,18 @@ import (
 )
 
 //
-type TestSuite struct {
+type OverseerTestSuite struct {
 	suite.Suite
 	app *martini.ClassicMartini
 }
 
 //
-func (suite *TestSuite) SetupTest() {
+func (suite *OverseerTestSuite) SetupTest() {
 	suite.app = AppEngine()
 }
 
 // In order for 'go test' to run this suite, we need to create
 // a normal test function and pass our suite to suite.Run
 func TestTestSuite(t *testing.T) {
-	suite.Run(t, new(TestSuite))
+	suite.Run(t, new(OverseerTestSuite))
 }
