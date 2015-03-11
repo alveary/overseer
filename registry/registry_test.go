@@ -14,6 +14,7 @@ type RegistryTestSuite struct {
 
 // func (suite *RegistryTestSuite) SetupTest() {
 // }
+
 func (suite *RegistryTestSuite) TestServiceRegistration() {
 	registry := Registry{make(map[string]interface{})}
 	newService := service.Service{"service-name", "root-url", "alive-url", 0}
