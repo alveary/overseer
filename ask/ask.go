@@ -10,8 +10,8 @@ import (
 	"github.com/alveary/overseer/service"
 )
 
-// Ask lets you retrieve the service URI information
-func Ask(serviceName string) (retrieved service.Service, err error) {
+// ForService lets you retrieve the service URI information
+func ForService(serviceName string) (retrieved service.Service, err error) {
 	overseerRoot := os.Getenv("OVERSEER_ROOT")
 	responsechan := make(chan *http.Response)
 	errorchan := make(chan error)
