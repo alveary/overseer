@@ -11,11 +11,12 @@ import (
 // Watchdog service checker
 type Watchdog struct {
 	service *service.Service
+	done    chan bool
 }
 
 // NewWatchdog is the constructor function
-func NewWatchdog(service *service.Service) Watchdog {
-	return Watchdog{service: service}
+func NewWatchdog(service *service.Service, done chan bool) Watchdog {
+	return Watchdog{service: service, done: done}
 }
 
 func (watchdog Watchdog) requestAliveResource() error {
@@ -32,30 +33,53 @@ func (watchdog Watchdog) requestAliveResource() error {
 	return nil
 }
 
-func (watchdog Watchdog) serviceTest(checkchan chan bool, errorchan chan error) {
+func (watchdog Watchdog) serviceTest(checkchan chan bool, errorchan chan error, donechan chan bool) {
 	err := watchdog.requestAliveResource()
 
-	if err != nil {
-		errorchan <- err
+	select {
+	case <-donechan:
 		return
-	}
+	default:
+		if err != nil {
+			errorchan <- err
+			return
+		}
 
-	checkchan <- true
+		checkchan <- true
+	}
 }
 
-func (watchdog Watchdog) spawnWatchCycle(checkchan chan bool, errorchan chan error) {
+func (watchdog Watchdog) Deregister() {
+	defer func() {
+		close(watchdog.done)
+	}()
+
+	fmt.Printf("Deregistering service \"%s\"\n", watchdog.service.Name)
+
+	watchdog.done <- true
+}
+
+func (watchdog Watchdog) spawnWatchCycle(done chan bool) {
+	checkchan := make(chan bool)
+	errorchan := make(chan error)
+	donechan := make(chan bool)
+
 	available := true
 
 	defer func() {
 		close(checkchan)
 		close(errorchan)
+		close(donechan)
 	}()
 
 	for available {
-
-		go watchdog.serviceTest(checkchan, errorchan)
+		go watchdog.serviceTest(checkchan, errorchan, donechan)
 
 		select {
+		case <-done:
+			available = false
+			donechan <- true
+			return
 		case <-checkchan:
 			fmt.Printf("Service \"%s\" is still alive\n", watchdog.service.Name)
 		case <-errorchan:
@@ -71,7 +95,9 @@ func (watchdog Watchdog) spawnWatchCycle(checkchan chan bool, errorchan chan err
 }
 
 // Watch ...
-func Watch(service *service.Service) {
-	watchdog := NewWatchdog(service)
-	go watchdog.spawnWatchCycle(make(chan bool), make(chan error))
+func Watch(service *service.Service) (watchdog Watchdog) {
+	done := make(chan bool)
+	watchdog = NewWatchdog(service, done)
+	go watchdog.spawnWatchCycle(done)
+	return watchdog
 }

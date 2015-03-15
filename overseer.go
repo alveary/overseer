@@ -6,7 +6,6 @@ import (
 
 	"github.com/alveary/overseer/registry"
 	"github.com/alveary/overseer/service"
-	"github.com/alveary/overseer/watchdog"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
 	"github.com/martini-contrib/render"
@@ -28,7 +27,6 @@ func AppEngine() *martini.ClassicMartini {
 	m.Post("/", binding.Json(service.Service{}), func(errors binding.Errors, service service.Service, resp http.ResponseWriter, log *log.Logger) {
 		log.Printf("registering new Service: %s", service.Name)
 		servicereg.Register(&service)
-		watchdog.Watch(&service)
 	})
 
 	m.Get("/", func(r render.Render) {
