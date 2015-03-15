@@ -14,6 +14,7 @@ import (
 // ServiceRegistry provides access to the dummy Registry
 func ServiceRegistry() registry.Registry {
 	registry := registry.Registry{make(map[string]interface{})}
+	registry.UnleashWatchdogs()
 	return registry
 }
 

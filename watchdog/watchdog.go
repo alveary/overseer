@@ -10,94 +10,66 @@ import (
 
 // Watchdog service checker
 type Watchdog struct {
-	service *service.Service
-	done    chan bool
+	Service *service.Service
+	Done    chan bool
+	Check   chan bool
+	Err     chan error
 }
 
 // NewWatchdog is the constructor function
-func NewWatchdog(service *service.Service, done chan bool) Watchdog {
-	return Watchdog{service: service, done: done}
+func NewWatchdog(service *service.Service) Watchdog {
+	done := make(chan bool)
+	check := make(chan bool)
+	err := make(chan error)
+
+	return Watchdog{service, done, check, err}
 }
 
 func (watchdog Watchdog) requestAliveResource() error {
-	resp, err := http.Head(watchdog.service.Alive)
+	resp, err := http.Head(watchdog.Service.Alive)
 
 	if err != nil {
 		return err
 	}
 
 	if resp.StatusCode > 299 {
-		return fmt.Errorf("Watchdog Lookup Failed: (%s) Status: %s", watchdog.service.Alive, resp.StatusCode)
+		return fmt.Errorf("Watchdog Lookup Failed: (%s) Status: %s", watchdog.Service.Alive, resp.StatusCode)
 	}
 
 	return nil
 }
 
-func (watchdog Watchdog) serviceTest(checkchan chan bool, errorchan chan error, donechan chan bool) {
+func (watchdog Watchdog) ServiceTest() {
 	err := watchdog.requestAliveResource()
 
 	select {
-	case <-donechan:
+	case <-watchdog.Done:
 		return
 	default:
 		if err != nil {
-			errorchan <- err
+			watchdog.Err <- err
 			return
 		}
 
-		checkchan <- true
-	}
-}
-
-func (watchdog Watchdog) Deregister() {
-	defer func() {
-		close(watchdog.done)
-	}()
-
-	fmt.Printf("Deregistering service \"%s\"\n", watchdog.service.Name)
-
-	watchdog.done <- true
-}
-
-func (watchdog Watchdog) spawnWatchCycle(done chan bool) {
-	checkchan := make(chan bool)
-	errorchan := make(chan error)
-	donechan := make(chan bool)
-
-	available := true
-
-	defer func() {
-		close(checkchan)
-		close(errorchan)
-		close(donechan)
-	}()
-
-	for available {
-		go watchdog.serviceTest(checkchan, errorchan, donechan)
-
-		select {
-		case <-done:
-			available = false
-			donechan <- true
-			return
-		case <-checkchan:
-			fmt.Printf("Service \"%s\" is still alive\n", watchdog.service.Name)
-		case <-errorchan:
-			watchdog.service.AddFailure()
-			fmt.Printf("Service \"%s\" is not available, increasing fail count to %d\n", watchdog.service.Name, watchdog.service.Fails)
-		case <-time.After(time.Second * 3):
-			watchdog.service.AddFailure()
-			fmt.Printf("Service \"%s\" is not responding in time, increasing fail count to %d\n", watchdog.service.Name, watchdog.service.Fails)
-		}
-
-		time.Sleep(30 * time.Second)
+		watchdog.Check <- true
 	}
 }
 
 // Watch ...
-func Watch(service *service.Service) (watchdog Watchdog) {
-	done := make(chan bool)
-	watchdog = NewWatchdog(service, done)
-	go watchdog.spawnWatchCycle(done)
-	return watchdog
+func Watch(service *service.Service) {
+	watchdog := NewWatchdog(service)
+
+	go watchdog.ServiceTest()
+
+	select {
+	case <-watchdog.Check:
+		fmt.Printf("Service \"%s\" is still alive\n", watchdog.Service.Name)
+	case <-watchdog.Err:
+		watchdog.Service.AddFailure()
+		fmt.Printf("Service \"%s\" is not available, increasing fail count to %d\n", watchdog.Service.Name, watchdog.Service.Fails)
+	case <-time.After(time.Second * 3):
+		watchdog.Done <- true
+		watchdog.Service.AddFailure()
+		fmt.Printf("Service \"%s\" is not responding in time, increasing fail count to %d\n", watchdog.Service.Name, watchdog.Service.Fails)
+	}
 }
