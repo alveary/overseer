@@ -43,7 +43,6 @@ func AppEngine() *martini.ClassicMartini {
 		} else {
 			r.JSON(404, service.Service{})
 		}
-
 	})
 
 	return m
