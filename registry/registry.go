@@ -24,7 +24,7 @@ func (registry *Registry) UnleashWatchdogs() {
 				watchdog.Watch(registered.(*service.Service))
 			}
 
-			time.Sleep(3 * time.Second)
+			time.Sleep(30 * time.Second)
 		}
 	}()
 }
