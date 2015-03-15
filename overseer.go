@@ -14,7 +14,7 @@ import (
 
 // ServiceRegistry provides access to the dummy Registry
 func ServiceRegistry() registry.Registry {
-	registry := registry.Registry{make(map[string]interface{})}
+	registry := registry.Registry{make(map[string]*service.Service)}
 	return registry
 }
 
@@ -37,7 +37,13 @@ func AppEngine() *martini.ClassicMartini {
 	})
 
 	m.Get("/:name", func(r render.Render, params martini.Params) {
-		r.JSON(200, servicereg.Services[params["name"]])
+		registered := servicereg.Services[params["name"]]
+
+		if registered.Root != "" {
+			r.JSON(200, registered)
+		} else {
+			r.JSON(404, service.Service{})
+		}
 
 	})
 

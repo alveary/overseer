@@ -15,6 +15,10 @@ func ForService(serviceName string) (retrieved service.Service, err error) {
 	overseerRoot := os.Getenv("OVERSEER_ROOT")
 	responsechan := make(chan *http.Response)
 	errorchan := make(chan error)
+	defer func() {
+		close(responsechan)
+		close(errorchan)
+	}()
 
 	go func() {
 		resp, err := http.Get(overseerRoot + "/" + serviceName)

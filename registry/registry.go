@@ -4,7 +4,7 @@ import "github.com/alveary/overseer/service"
 
 // Registry of microservices
 type Registry struct {
-	Services map[string]interface{}
+	Services map[string]*service.Service
 }
 
 // Register registrates a new service for a service name
