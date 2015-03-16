@@ -1,11 +1,17 @@
 package service
 
-// Service ...
+// Service db schema
+import "time"
+
 type Service struct {
-	Name  string `json:"name"`
-	Root  string `json:"root"`
-	Alive string `json:"alive"`
-	Fails int    `json:"fails"`
+	ID        int    `sql:"AUTO_INCREMENT"`
+	Name      string `sql:"size:255" json:"name"`
+	Root      string `sql:"size:255" json:"root"`
+	Alive     string `sql:"size:3000" json:"alive"`
+	Fails     int
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 func (service *Service) AddFailure() {
