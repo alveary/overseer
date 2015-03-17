@@ -18,11 +18,11 @@ func (suite *RegistryTestSuite) SetupTest() {
 func (suite *RegistryTestSuite) TestServiceRegistration() {
 	registry := Registry{make(map[string]interface{})}
 	newService := service.Service{"service-name", "root-url", "alive-url", 0}
-	assert.Equal(suite.T(), service.Services["service-name"], nil, "A new registry should be empty")
+	assert.Equal(suite.T(), registry.Services["service-name"], nil, "A new registry should be empty")
 
 	registry.Register(&newService)
 
-	assert.Equal(suite.T(), service.Services["service-name"], &newService)
+	assert.Equal(suite.T(), registry.Services["service-name"], &newService)
 }
 
 // In order for 'go test' to run this suite, we need to create

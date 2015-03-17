@@ -1,7 +1,6 @@
 package watchdog
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -41,7 +40,6 @@ func (watchdog Watchdog) requestAliveResource() error {
 }
 
 func (watchdog Watchdog) ServiceTest() {
-	fmt.Println(watchdog.Service)
 	err := watchdog.requestAliveResource()
 
 	select {
@@ -58,23 +56,20 @@ func (watchdog Watchdog) ServiceTest() {
 }
 
 // Watch ...
-func Watch(newService *service.Service) (*service.Service, error) {
-	watchdog := NewWatchdog(newService)
+func Watch(service *service.Service) {
+	watchdog := NewWatchdog(service)
 
 	go watchdog.ServiceTest()
 
 	select {
 	case <-watchdog.Check:
 		fmt.Printf("Service \"%s\" is still alive\n", watchdog.Service.Name)
-		return watchdog.Service, nil
-	case err := <-watchdog.Err:
+	case <-watchdog.Err:
 		watchdog.Service.AddFailure()
 		fmt.Printf("Service \"%s\" is not available, increasing fail count to %d\n", watchdog.Service.Name, watchdog.Service.Fails)
-		return watchdog.Service, err
 	case <-time.After(time.Second * 3):
 		watchdog.Done <- true
 		watchdog.Service.AddFailure()
 		fmt.Printf("Service \"%s\" is not responding in time, increasing fail count to %d\n", watchdog.Service.Name, watchdog.Service.Fails)
-		return watchdog.Service, errors.New("Timeout of registered Service")
 	}
 }
