@@ -27,10 +27,6 @@
 		{
 			"ImportPath": "github.com/oxtoacart/bpool",
 			"Rev": "89c3c7319abbd041bc0a83bdf10bcb8bd445287b"
-		},
-		{
-			"ImportPath": "github.com/pilu/fresh/runner/runnerutils",
-			"Rev": "c4a501e4002c78dfd6bd519001a580e59a9db4b6"
 		}
 	]
 }
