@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/alveary/overseer",
-	"GoVersion": "go1.4.1",
+	"GoVersion": "go1.4.2",
 	"Packages": [
 		"./..."
 	],
@@ -11,13 +11,14 @@
 			"Rev": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504"
 		},
 		{
+			"ImportPath": "github.com/fzzy/radix/redis",
+			"Comment": "v0.5.4",
+			"Rev": "fd5b7600bbcb6635049fa64166a7235951a8df5f"
+		},
+		{
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-112-ga66382b",
 			"Rev": "a66382bc2bd8a3f7b3db8b874d15f3119f1927bd"
-		},
-		{
-			"ImportPath": "github.com/martini-contrib/binding",
-			"Rev": "1928ed2850e7d65507ea4198d935597e43612c7d"
 		},
 		{
 			"ImportPath": "github.com/martini-contrib/render",
@@ -28,16 +29,8 @@
 			"Rev": "89c3c7319abbd041bc0a83bdf10bcb8bd445287b"
 		},
 		{
-			"ImportPath": "github.com/stretchr/testify/assert",
-			"Rev": "e4ec8152c15fc46bd5056ce65997a07c7d415325"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify/require",
-			"Rev": "e4ec8152c15fc46bd5056ce65997a07c7d415325"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify/suite",
-			"Rev": "e4ec8152c15fc46bd5056ce65997a07c7d415325"
+			"ImportPath": "github.com/pilu/fresh/runner/runnerutils",
+			"Rev": "c4a501e4002c78dfd6bd519001a580e59a9db4b6"
 		}
 	]
 }
