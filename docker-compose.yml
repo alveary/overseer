@@ -1,0 +1,10 @@
+web:
+  build: .
+  ports:
+   - "9000:8080"
+  volumes:
+   - .:/go/src/github.com/alveary/overseer
+  # links:
+  #  - redis
+# redis:
+#   image: redis

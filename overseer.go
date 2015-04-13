@@ -10,6 +10,10 @@ func AppEngine() *martini.ClassicMartini {
 	m := martini.Classic()
 	m.Use(render.Renderer())
 
+	m.Get("/", func(r render.Render) {
+		r.HTML(200, "index", nil)
+	})
+
 	return m
 }
 
