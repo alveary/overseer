@@ -4,7 +4,10 @@ web:
    - "9000:8080"
   volumes:
    - .:/go/src/github.com/alveary/overseer
-  # links:
-  #  - redis
-# redis:
-#   image: redis
+  environment:
+    OVERSEER_REDIS_HOST: redis
+    OVERSEER_REDIS_PORT: 6379
+  links:
+   - redis
+redis:
+  image: redis
