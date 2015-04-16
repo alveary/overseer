@@ -42,3 +42,16 @@ func (registry *Registry) All() []string {
 
 	return entries
 }
+
+// Register adds a new service to the registry
+func (registry *Registry) Register(name string, address string) (service, error) {
+	s := newService(name, address)
+	_, err := registry.client.Cmd("HSET", "services:"+name, s).Str()
+
+	if err != nil {
+		log.Print(err)
+		return nil, err
+	}
+
+	return s, nil
+}
