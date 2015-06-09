@@ -1,7 +1,5 @@
 web:
   build: .
-  ports:
-   - "9000:8080"
   volumes:
    - .:/go/src/github.com/alveary/overseer
   environment:
@@ -11,3 +9,14 @@ web:
    - redis
 redis:
   image: redis
+proxy:
+  # image: mechanoid/haproxy-scale
+  build: /Users/falkh/code/gihub.com/alveary/haproxy-scale
+  restart: always
+  environment:
+    PROXY_APP_PORT: 8080
+    PROXY_APP_PREFIX: web
+  ports:
+    - "8000:80"
+  links:
+    - web

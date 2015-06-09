@@ -31,6 +31,10 @@ func AppEngine() *martini.ClassicMartini {
 		r.HTML(200, "index", all)
 	})
 
+	m.Get("/alive", func(r render.Render) {
+		r.Status(200)
+	})
+
 	m.Post("/", binding.Form(requestedService{}), func(errors binding.Errors, req requestedService, resp http.ResponseWriter) {
 		s, err := services.Register(req.name, req.address)
 
@@ -46,7 +50,7 @@ func AppEngine() *martini.ClassicMartini {
 }
 
 func init() {
-	log.Print("Initializing Overseer Instance")
+	log.Print("Initializing Overseer Instance:")
 }
 
 func main() {
