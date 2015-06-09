@@ -11,8 +11,8 @@ import (
 )
 
 type requestedService struct {
-	name    string
-	address string
+	Name    string `json:"name"`
+	Address string `json:"address"`
 }
 
 // AppEngine for web engine setup
@@ -35,8 +35,10 @@ func AppEngine() *martini.ClassicMartini {
 		r.Status(200)
 	})
 
-	m.Post("/", binding.Form(requestedService{}), func(errors binding.Errors, req requestedService, resp http.ResponseWriter) {
-		s, err := services.Register(req.name, req.address)
+	m.Post("/", binding.Json(requestedService{}), func(errors binding.Errors, req requestedService, resp http.ResponseWriter) {
+		log.Printf("Requested new Service: %s", req)
+
+		s, err := services.Register(req.Name, req.Address)
 
 		if err != nil {
 			resp.WriteHeader(http.StatusBadRequest)
